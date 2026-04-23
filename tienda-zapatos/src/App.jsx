@@ -11,7 +11,7 @@ const productData = [
     name: "Zapato Deportivo Runner",
     price: 89.99,
     category: "Deportivo",
-    image: "https://via.placeholder.com/300",
+    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/553bc1c5fd204593ac3b13d71822deb8_9366/Tenis_Response_Runner_Blanco_IH6101.jpg",
     stock: 15,
   },
   {
@@ -19,7 +19,7 @@ const productData = [
     name: "Zapato Formal Elegance",
     price: 129.99,
     category: "Formal",
-    image: "https://via.placeholder.com/300",
+    image: "https://www.villaromana.com.co/cdn/shop/products/ZA00104031_01.jpg?v=1750297129",
     stock: 8,
   },
   {
@@ -27,7 +27,7 @@ const productData = [
     name: "Sandalia Summer Beach",
     price: 45.5,
     category: "Casual",
-    image: "https://via.placeholder.com/300",
+    image: "https://m.media-amazon.com/images/I/71s-tGJqAVS._AC_UF894,1000_QL80_.jpg",
     stock: 20,
   },
   {
@@ -35,7 +35,7 @@ const productData = [
     name: "Bota Timber Classic",
     price: 159.99,
     category: "Botas",
-    image: "https://via.placeholder.com/300",
+    image: "https://assets.timberland.com/images/t_img/f_auto,h_1300,e_sharpen:60,w_1300/dpr_2.0/v1741199070/TB110061713-HERO/Mens-Timberland-Premium-6Inch-Waterproof-Boot-TBL-Wheat-Nubuck-HERO.png",
     stock: 5,
   },
   {
@@ -43,7 +43,7 @@ const productData = [
     name: "Zapato Deportivo Pro",
     price: 110.0,
     category: "Deportivo",
-    image: "https://via.placeholder.com/300",
+    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/e138c7d37c9e4115ad18d7628079a77d_faec/Tenis_Adizero_Adios_Pro_4_Blanco_JR1094_db01_00_standard.jpg",
     stock: 12,
   },
   {
@@ -51,7 +51,7 @@ const productData = [
     name: "Mocasín Comfort Plus",
     price: 75.0,
     category: "Casual",
-    image: "https://via.placeholder.com/300",
+    image: "https://media.falabella.com/falabellaCO/123581319_01/w=1500,h=1500,fit=cover",
     stock: 18,
   },
   {
@@ -59,7 +59,7 @@ const productData = [
     name: "Zapato Formal Executive",
     price: 189.99,
     category: "Formal",
-    image: "https://via.placeholder.com/300",
+    image: "https://luzantiny.com/wp-content/uploads/2024/08/Zapato5-b.jpg",
     stock: 3,
   },
   {
@@ -67,7 +67,7 @@ const productData = [
     name: "Botín Urban Style",
     price: 95.0,
     category: "Botas",
-    image: "https://via.placeholder.com/300",
+    image: "https://xti.com.co/wp-content/uploads/4703430-Botin-Danae-Blanco-Xti_05.jpg",
     stock: 10,
   },
 ];
@@ -78,25 +78,22 @@ function App() {
   const [filter, setFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [showCart, setShowCart] = useState(false);
-  const [x, setX] = useState(0);
 
   useEffect(() => {
-    console.log("Products loaded");
-  }, []);
+    let filtered = productData;
 
-  useEffect(() => {
-    const filtered = productData.filter((product) => {
-      if (filter !== "Todos" && product.category !== filter) {
-        return false;
-      }
-      return true;
-    });
+    if (filter !== "Todos") {
+      filtered = filtered.filter((p) => p.category === filter);
+    }
+
+    if (searchTerm !== "") {
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
     setProducts(filtered);
-  }, [filter]);
-
-  useEffect(() => {
-    setX(x + 1);
-  }, [products]);
+  }, [filter, searchTerm]);
 
   const addToCart = (product) => {
     const existingItem = cart.find((item) => item.id === product.id);
@@ -105,8 +102,8 @@ function App() {
         cart.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        ),
+            : item
+        )
       );
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
@@ -114,16 +111,15 @@ function App() {
   };
 
   const removeFromCart = (productId) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
-    setCart(updatedCart);
+    setCart(cart.filter((item) => item.id !== productId));
   };
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
     setCart(
       cart.map((item) =>
-        item.id === productId ? { ...item, quantity: newQuantity } : item,
-      ),
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
     );
   };
 
@@ -133,10 +129,6 @@ function App() {
 
   const handleSearch = (term) => {
     setSearchTerm(term);
-    const results = productData.filter((p) =>
-      p.name.toLowerCase().includes(term.toLowerCase()),
-    );
-    setProducts(results);
   };
 
   return (

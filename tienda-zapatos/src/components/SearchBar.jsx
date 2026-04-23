@@ -1,12 +1,15 @@
 import { useState } from "react";
 
 function SearchBar({ onSearch }) {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setSearchValue(value);
-    onSearch(value);
+    setSearchText(value);
+
+    if (onSearch) {
+      onSearch(value);
+    }
   };
 
   return (
@@ -14,7 +17,7 @@ function SearchBar({ onSearch }) {
       <input
         type="text"
         placeholder="Buscar zapatos..."
-        value={searchValue}
+        value={searchText}
         onChange={handleInputChange}
         className="search-input"
       />
