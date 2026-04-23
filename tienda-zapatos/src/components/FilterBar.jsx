@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function FilterBar({ currentFilter, onFilterChange }) {
+function FilterBar({ currentFilter, onFilterChange, onPriceChange }) {
   const categories = ["Todos", "Deportivo", "Formal", "Casual", "Botas"];
   const [selectedPrice, setSelectedPrice] = useState("all");
 
@@ -9,7 +9,14 @@ function FilterBar({ currentFilter, onFilterChange }) {
   };
 
   const handlePriceFilter = (priceRange) => {
-    setSelectedPrice(priceRange);
+    // Lógica de toggle: si ya está seleccionado, lo deselecciona
+    const newPrice = selectedPrice === priceRange ? "all" : priceRange;
+    setSelectedPrice(newPrice);
+    
+    // Notificamos al componente padre del cambio
+    if (onPriceChange) {
+      onPriceChange(newPrice);
+    }
   };
 
   return (
